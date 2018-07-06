@@ -638,6 +638,30 @@ This method has been retired and MUST NOT be used.
 Confirming the Applicant's control over the FQDN by validating the Applicant is the Domain Contact. This method may only be used if the CA is also the Domain Name Registrar, or an Affiliate of the Registrar, of the Base Domain Name.
 Note: Once the FQDN has been validated using this method, the CA MAY also issue Certificates for other FQDNs that end with all the labels of the validated FQDN. This method is suitable for validating Wildcard Domain Names.
 
+##### 3.2.2.4.13 Domain Owner Email published in DNS
+
+Confirm the Applicant's control over the FQDN by (i) sending an email to a DNS domain name holder, (ii) including a Random Value in the email, and (iii) receiving a confirming response utilizing the Random Value. The CA MUST send the email to an email address found in:
+ 
+1.	DNS TXT record specified as "domain-authorization-contact" (e.g., domain-authorization-contact=domainowner@example.com), or
+2.	CAA Contact property record as defined in Appendix B.
+ 
+Each email MAY confirm control of multiple FQDNs, provided the email address used is a DNS contact email address for each FQDN being confirmed. 
+ 
+The Random Value SHALL be unique in each email. The email MAY be re-sent in its entirety, including the re-use of the Random Value, provided that its entire contents and recipient SHALL remain unchanged. The Random Value SHALL remain valid for use in a confirming response for no more than 30 days from its creation. The CPS MAY specify a shorter validity period for Random Values.
+ 
+Note: Once the FQDN has been validated using this method, the CA MAY also issue Certificates for other FQDNs that end with all the labels of the validated FQDN. This method is suitable for validating Wildcard Domain Names.
+ 
+##### 3.2.2.4.14 Domain Owner Phone published in DNS
+
+Confirm the Applicant's control over the FQDN by calling the DNS domain name holder phone number and obtaining a response confirming the Applicant's request for validation of the FQDN. The CA MUST place the call to a phone number identified in:
+ 
+1.	DNS TXT record specified as "domain-authorization-contact" (e.g., domain-authorization-contact=+1 310 555 1212), or
+2.	CAA Contact property record as defined in Appendix B.
+ 
+Each phone call SHALL be made to a single number and MAY confirm control of multiple FQDNs, provided that the phone number is identified by the DNS contact as a valid contact method for every Base Domain Name being verified using the phone call.
+ 
+Note: Once the FQDN has been validated using this method, the CA MAY also issue Certificates for other FQDNs that end with all the labels of the validated FQDN. This method is suitable for validating Wildcard Domain Names.
+
 #### 3.2.2.5 Authentication for an IP Address
 For each IP Address listed in a Certificate, the CA SHALL confirm that, as of the date the Certificate was issued, the Applicant has control over the IP Address by:
 
@@ -1932,5 +1956,30 @@ Corrected Text
   Note that the search does not include the parent of a target of a CNAME record (except when the CNAME points back to its own path).
 
   To prevent resource exhaustion attacks, CAs SHOULD limit the length of CNAME chains that are accepted. However CAs MUST process CNAME chains that contain 8 or fewer CNAME records.
+
+# APPENDIX B – CAA CONTACT TAG
+
+The syntax for the contact property is similar to the iodef property.  It allows domain owners to publish contact information in DNS in addition to WHOIS for the purpose of validating domain control.
+
+CAA contact Property
+
+contact <URL> :  The contact property entry specifies the authorized means of contacting the holder of the domain or another party who is authorized to approve issuance of certificates for the domain.
+
+The contact property specifies a means of contacting the domain holder, or another party that is authorized to approve issuance of certificates for the domain in question.
+
+The contact property takes a URL as its parameter.  The following URL scheme types SHOULD be implemented:
+
+mailto: An SMTP email address where the domain holder or other authorized party can be contacted.
+
+tel: A telephone number where the domain holder or other authorized party can be contacted.
+
+The following is an example where the holder of the domain specified the contact property using both an email address and a phone number.
+
+$ORIGIN example.com
+.              CAA 0 issue “ca.example.net”
+.              CAA 0 contact “mailto:domainowner@example.com”
+.              CAA 0 contact “tel:+1 310 555 1212”
+
+The CONTACT tag will also be registered with IANA as a reserved CAA tag, and will be submitted for inclusion in a future version of RFC 6844.
 
 
