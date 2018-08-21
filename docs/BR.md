@@ -281,6 +281,10 @@ No stipulation.
 
 **Issuing CA**: In relation to a particular Certificate, the CA that issued the Certificate. This could be either a Root CA or a Subordinate CA.
 
+**IP Address Authority**:  The Internet Assigned Numbers Authority (IANA) or a Regional Internet Registry such as RIPE, APNIC, ARIN, AfriNIC and LACNIC
+
+**IP Address Contact**: Contacts listed as the owners or registered contacts for IP addresses received from IP Address Authority.
+
 **Key Compromise**: A Private Key is said to be compromised if its value has been disclosed to an unauthorized person, an unauthorized person has had access to it, or there exists a practical technique by which an unauthorized person may discover its value. A Private Key is also considered compromised if methods have been developed that can easily calculate it based on the Public Key (such as a Debian weak key, see http://wiki.debian.org/SSLkeys) or if there is clear evidence that the specific method used to generate the Private Key was flawed.
 
 **Key Generation Script**: A documented plan of procedures for the generation of a CA Key Pair **.**
@@ -642,25 +646,53 @@ Note: Once the FQDN has been validated using this method, the CA MAY also issue 
 
 This section defines the permitted processes and procedures for validating the Applicant’s ownership or control of an IP Address listed in the Certificate.
  
-Effective April 1, 2019, the CA SHALL confirm that prior to issuance the CA verified each IP Address listed in the Certificate using at a method specified in this section 3.2.2.5.
+Effective June 31, 2019, the CA SHALL confirm that prior to issuance the CA verified each IP Address listed in the Certificate using at a method specified in this section 3.2.2.5.
 
-Completed confirmations of Applicant authority may be valid for the issuance of multiple certificates over time. In all cases, the confirmation must have been initiated within the time period specified in the relevant requirement (such as Section 4.2.1 of this document) prior to certificate issuance. For purposes of IP Address validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate.  Effective April 1, 2019, IP Address validations using methods other than those specified in this section SHALL NOT be used for issuance of certificates.
+Completed confirmations of Applicant authority may be valid for the issuance of multiple certificates over time. In all cases, the confirmation must have been initiated within the time period specified in the relevant requirement (such as Section 4.2.1 of this document) prior to certificate issuance. For purposes of IP Address validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate.  Effective June 31, 2019, IP Address validations using methods other than those specified in this section SHALL NOT be used for issuance of certificates.
 
 CAs SHALL maintain a record of which IP validation method, including the relevant BR version number, was used to validate each IP address.
 
 Note: IP Addresses are listed in Subscriber Certificates using iPAddress in the subjectAltName extension. CAs are not required to verify IP Addresses listed in Subordinate CA Certificates via iPAddress field in the permittedSubtrees or excludedSubtrees in the Name Constraints extension prior to inclusion in the Subordinate CA Certificate. Inclusion of an IP address in a permittedSubtree or excludedSubtree extension does not limit or meet the requirements to validate each IP address in accordance with this section.
 
-3.2.2.5.1. Agreed-Upon Change to Website
+3.2.2.5.1. Agreed-Upon Change for IP 
 
-If using this method, the CA SHALL confirm the Applicant's control over the requested IP Address by confirming the presence of a Request Token or Random Value contained in the content of a file or webpage in the form of a meta tag of the following under the "/.well-known/pki-validation" directory, or another path registered with IANA for the purpose of validating control of Domain Names or IP addresses, on the IP Address that is accessible by the CA via HTTP/HTTPS over an Authorized Port. The Request Token or Random Value MUST NOT appear in the request. 
+Confirming the Applicant's control over the IP address by confirming one of the following under the "/.well-known/pki-validation" directory, or another path registered with IANA for the purpose of Domain Validation that is accessible by the CA via HTTP/HTTPS over an Authorized Port:
 
-If a Random Value is used, the CA SHALL provide a Random Value unique to the certificate request and SHALL not use the Random Value after the longer of (i) 30 days or (ii) if the Applicant submitted the certificate request, the timeframe permitted for reuse of validated information relevant to the certificate (such as in Section 3.3.1 of these Requirements). 
+1.	The presence of Required Website Content contained in the content of a file. The entire Required Website Content MUST NOT appear in the request used to retrieve the file or web page, or
 
-3.2.2.5.2. Reverse Address Lookup
+2.	The presence of the Request Token or Random Value contained in the content of a file where the Request Token or Random Value MUST NOT appear in the request.
+
+If a Random Value is used, the CA SHALL provide a Random Value unique to the certificate request and SHALL not use the Random Value after the longer of (i) 30 days or (ii) if the Applicant submitted the Certificate request, the timeframe permitted for reuse of validated information relevant to the Certificate (such as in Section 4.2.1 of these Guidelines). 
+
+3.2.2.5.2. Email, Fax, SMS or Postal Mail to IP Address Contact
+
+Confirming the Applicant's control over the IP Address by sending a Random Value via email, fax, SMS, or postal mail and then receiving a confirming response utilizing the Random Value. The Random Value MUST be sent to an email address, fax/SMS number, or postal mail address identified as an IP Address Contact.
+
+Each email, fax, SMS, or postal mail MAY confirm control of multiple IP addresses.
+
+The CA MAY send the email, fax, SMS, or postal mail identified under this section to more than one recipient provided that every recipient shares the same IP Address Contact information for every IP Address being verified using the email, fax, SMS, or postal mail.
+
+The Random Value SHALL be unique in each email, fax, SMS, or postal mail.
+
+The CA MAY resend the email, fax, SMS, or postal mail in its entirety, including re-use of the Random Value, provided that the communication's entire contents and recipient(s) remain unchanged.
+
+The Random Value SHALL remain valid for use in a confirming response for no more than 30 days from its creation. The CPS MAY specify a shorter validity period for Random Values, in which case the CA MUST follow its CPS.
+
+3.2.2.5.3. Phone Contact with IP Address Contact
+
+Confirming the Applicant's control over the IP address by calling the IP Address Contact’s phone number and obtain a confirming response to validate the IP Address.
+
+Each phone call MAY confirm control of multiple IP Addresses  provided that the same IP Address Contact phone number is listed for each IP Address being verified and they provide a confirming response for each IP address or IP address range.
+
+In the event that someone other than a IP Address Contact is reached, the CA MAY request to be transferred to the IP Address Contact.
+
+In the event of reaching voicemail, the CA may leave the Random Value and the IP Address(es) being validated.  The IP Address Contact may return the Random Number to the CA via Phone, Email, Fax, or SMS to approve the request within 30 days of the voicemail.
+
+3.2.2.5.4. Reverse Address Lookup
 
 If using this method, the CA SHALL verify the Applicant’s control over the IP Address by obtaining a Domain Name associated with the IP Address through a reverse-IP lookup on the IP Address and then verifying control over the Domain Name using a method permitted under Section 3.2.2.4.
 
-3.2.2.5.3. Delegated Control Over a Device
+3.2.2.5.5. Delegated Control Over a Device
 
 If using this method, the CA SHALL verify the Applicant’s control over an IP Address by 1) the CA accessing a device located at the requested IP Address, 2) the CA authenticating to the device using credentials provided by the Applicant or created by the CA, and 3) the CA adding a Request Token or Random Value to a file on the device at a location determined by the CA."
 
