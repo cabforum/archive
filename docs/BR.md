@@ -639,15 +639,42 @@ Confirming the Applicant's control over the FQDN by validating the Applicant is 
 Note: Once the FQDN has been validated using this method, the CA MAY also issue Certificates for other FQDNs that end with all the labels of the validated FQDN. This method is suitable for validating Wildcard Domain Names.
 
 #### 3.2.2.5 Authentication for an IP Address
-For each IP Address listed in a Certificate, the CA SHALL confirm that, as of the date the Certificate was issued, the Applicant has control over the IP Address by:
 
-1. Having the Applicant demonstrate practical control over the IP Address by making an agreed-upon change to information found on an online Web page identified by a uniform resource identifier containing the IP Address;
-2. Obtaining documentation of IP address assignment from the Internet Assigned Numbers Authority (IANA) or a Regional Internet Registry (RIPE, APNIC, ARIN, AfriNIC, LACNIC);
-3. Performing a reverse-IP address lookup and then verifying control over the resulting Domain Name under Section 3.2.2.4; or
-4. Using any other method of confirmation, provided that the CA maintains documented evidence that the method of confirmation establishes that the Applicant has control over the IP Address to at least the same level of assurance as the methods previously described.
+This section defines the permitted processes and procedures for validating the Applicant’s ownership or control of an IP Address listed in the Certificate.
+ 
+The CA SHALL confirm that prior to issuance the CA verified each IP Address listed in the Certificate using at a method specified in this section 3.2.2.5.
 
-Note: IPAddresses may be listed in Subscriber Certificates using IPAddress in the subjectAltName extension or in Subordinate CA Certificates via IPAddress in permittedSubtrees within the Name Constraints extension.
+Completed confirmations of Applicant authority may be valid for the issuance of multiple certificates over time. In all cases, the confirmation must have been initiated within the time period specified in the relevant requirement (such as Section 4.2.1 of this document) prior to certificate issuance. For purposes of IP Address validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate. 
 
+CAs SHALL maintain a record of which domain validation method, including the relevant BR version number, was used to validate each IP address.
+
+Note: IP Addresses are listed in Subscriber Certificates using iPAddress in the subjectAltName extension. CAs are not required to verify IP Addresses listed in Subordinate CA Certificates via iPAddress field in the permittedSubtrees or excludedSubtrees in the Name Constraints extension prior to inclusion in the Subordinate CA Certificate. Inclusion of an IP address in a permittedSubtree or excludedSubtree extension does not limit or meet the requirements to validate each IP address in accordance with this section.
+
+3.2.2.5.1. Agreed-Upon Change to Website
+
+If using this method, the CA SHALL confirm the Applicant's control over the requested IP Address by confirming the presence of a Request Token or Random Value contained in the content of a file or webpage in the form of a meta tag of the following under the "/.well-known/pki-validation" directory, or another path registered with IANA for the purpose of validating control of Domain Names or IP addresses, on the IP Address that is accessible by the CA via HTTP/HTTPS over an Authorized Port. The Request Token or Random Value MUST NOT appear in the request. 
+
+If a Random Value is used, the CA SHALL provide a Random Value unique to the certificate request and SHALL not use the Random Value after the longer of (i) 30 days or (ii) if the Applicant submitted the certificate request, the timeframe permitted for reuse of validated information relevant to the certificate (such as in Section 3.3.1 of these Requirements). 
+
+3.2.2.5.2. Validating the Applicant as the IP Owner
+
+If using this method, the CA SHALL confirm the Applicant’s control over an IP Address by obtaining documentation of IP address assignment to the Applicant directly from the Internet Assigned Numbers Authority (IANA) or a Regional Internet Registry (RIPE, APNIC, ARIN, AfriNIC, LACNIC). A CA MAY NOT use this method except unless the CA validates (i) the Applicant's identity under BR Section 3.2.2.1 and (ii) the authority of the Applicant Representative under BR Section 3.2.5.
+
+3.2.2.5.3. Reverse Address Lookup
+
+If using this method, the CA SHALL verify the Applicant’s control over the IP Address by obtaining a Domain Name associated with the IP Address through a reverse-IP lookup on the IP Address and then verifying control over the Domain Name using a method permitted under Section 3.2.2.4.
+
+3.2.2.5.4. Test Certificate
+
+If using this method, the CA SHALL confirm the Applicant's control over the requested IP Address by confirming the presence of a non-expired Test Certificate issued by the CA on the IP Address and which is accessible by the CA via TLS over an Authorized Port for the purpose of issuing a Certificate with the same Public Key as in the Test Certificate. 
+
+3.2.2.5.5. TLS Using a Random Number
+
+If using this method, the CA SHALL confirm the Applicant's control over the requested IP Address by confirming the presence of a Random Value within a Certificate on the IP Address which is accessible by the CA via TLS over an Authorized Port.
+
+3.2.2.5.6. Delegated Control Over a Device
+
+If using this method, the CA SHALL verify the Applicant’s control over an IP Address by 1) the CA accessing a device located at the requested IP Address, 2) the CA authenticating to the device using credentials provided by the Applicant or created by the CA, and 3) the CA adding a Request Token or Random Value to a file on the device at a location determined by the CA."
 
 #### 3.2.2.6 Wildcard Domain Validation
 Before issuing a certificate with a wildcard character (\*) in a CN or subjectAltName of type DNS-ID, the CA MUST establish and follow a documented procedure[^pubsuffix] that determines if the wildcard character occurs in the first label position to the left of a "registry-controlled" label or "public suffix" (e.g. "\*.com", "\*.co.uk", see RFC 6454 Section 8.2 for further explanation).
