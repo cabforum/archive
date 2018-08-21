@@ -648,7 +648,7 @@ This section defines the permitted processes and procedures for validating the A
  
 Effective June 31, 2019, the CA SHALL confirm that prior to issuance the CA has validated each IP Address listed in the Certificate using at least one method specified in this section 3.2.2.5.
 
-Completed confirmations of Applicant authority may be valid for the issuance of multiple certificates over time. In all cases, the confirmation must have been initiated within the time period specified in the relevant requirement (such as Section 4.2.1 of this document) prior to certificate issuance. For purposes of IP Address validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate.  Effective June 31, 2019, IP Address validations using methods other than those specified in this section SHALL NOT be used for issuance of certificates.
+Completed confirmations of Applicant authority may be valid for the issuance of multiple Certificates over time. In all cases, the confirmation must have been initiated within the time period specified in the relevant requirement (such as Section 4.2.1 of this document) prior to certificate issuance. For purposes of IP Address validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate.  Effective June 31, 2019, IP Address validations using methods other than those specified in this section SHALL NOT be used for issuance of Certificates.
 
 CAs SHALL maintain a record of which IP validation method, including the relevant BR version number, was used to validate each IP address.
 
