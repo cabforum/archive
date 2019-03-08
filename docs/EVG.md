@@ -190,6 +190,8 @@ Capitalized Terms are defined in the Baseline Requirements except where provided
 
 **Latin Notary:**  A person with legal training whose commission under applicable law not only includes authority to authenticate the execution of a signature on a document but also responsibility for the correctness and content of the document. A Latin Notary is sometimes referred to as a Civil Law Notary.
 
+**Legal Entity**: A Private Organization, Government Entity, Business Entity, or Non-Commercial Entity.
+
 **Legal Existence:**  A Private Organization, Government Entity, or Business Entity has Legal Existence if it has been validly formed and not otherwise terminated, dissolved, or abandoned.
 
 **Legal Practitioner:**  A person who is either a lawyer or a Latin Notary as described in these Guidelines and competent to render an opinion on factual claims of the Applicant.
@@ -213,6 +215,10 @@ Capitalized Terms are defined in the Baseline Requirements except where provided
 **Qualified Independent Information Source:**  A regularly-updated and current, publicly available, database designed for the purpose of accurately providing the information for which it is consulted, and which is generally recognized as a dependable source of such information.
 
 **Registration Agency:**  A Governmental Agency that registers business information in connection with an entity's business formation or authorization to conduct business under a license, charter or other certification.  A Registration Agency MAY include, but is not limited to (i) a State Department of Corporations or a Secretary of State; (ii) a licensing agency, such as a State Department of Insurance; or (iii) a chartering agency, such as a state office or department of financial regulation, banking or finance, or a federal agency such as the Office of the Comptroller of the Currency or Office of Thrift Supervision.
+
+**Registration Reference:** A unique identifier assigned to a Legal Entity.
+
+**Registration Scheme:** A scheme for assigning a Registration Reference meeting the requirements identified in Section 9.2.8.
 
 **Registered Agent:**  An individual or entity that is:  (i) authorized by the Applicant to receive service of process and business communications on behalf of the Applicant; and (ii) listed in the official records of the Applicant's Jurisdiction of Incorporation as acting in the role specified in (i) above.
 
@@ -512,7 +518,43 @@ Postal code: subject:postalCode (OID:  2.5.4.17)
 
 **Contents:**   This field MUST contain the address of the physical location of the Subject's Place of Business.
 
-### 9.2.8.  Other Subject Attributes
+### 9.2.8.  Subject Organization Identifier Field
+
+Certificate field: organizationIdentifier (OID: 2.5.4.97)
+Required/Optional: Optional
+Contents: If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
+   
+The Registration Scheme MUST be identified using the using the following structure in the presented order:
+
+• 3 character Registration Scheme identifier;
+• 2 character ISO 3166 country code for the nation in which the Registration Scheme is operated, or if the scheme is operated globally ISO 3166 code “XG” shall be used;
+• hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)); 
+• if required under Section 9.2.5, a 2 character ISO 3166-2 identifier for the subdivision (state or province) of the nation in which the Registration Scheme is operated, followed by hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)); and
+• Registration Reference allocated in accordance with the identified Registration 
+     Scheme
+
+As in section 9.2.5, the specified location information MUST match the scope of the registration being referenced.
+
+Examples:
+
+NTRGB-12345678
+NTRUS-CA-12345678
+
+VATDE-123456789
+
+PSDBE-NBB-1234.567.890
+
+Registration Schemes listed in Appendix H are currently recognized as valid under these guidelines.
+
+The CA SHALL:
+
+a) confirm that the organization represented by the Registration Reference is the same as the organization named in the organizationName field as specified in Section 9.2.1 within the context of the subject’s jurisdiction as specified in 
+   Section 9.2.5;
+b) further verify the Registration Reference matches other information verified in accordance with section 11; 
+c) take appropriate measures to disambiguate between different organizations as described in Appendix H for each Registration Scheme;
+d) Apply the validation rules relevant to the Registration Scheme as specified in Appendix H.
+
+### 9.2.9.  Other Subject Attributes
 
 All other optional attributes, when present within the subject field, MUST contain information that has been verified by the CA. CAs SHALL NOT include Fully-Qualified Domain Names in Subject attributes except as specified in Sections 9.2.1 and SHALL NOT include any Subject Organization Information except as specified in Section 9.2. Optional subfields within the Subject field MUST either contain information verified by the CA or MUST be left empty.  Metadata such as '.', '-', and ' ' characters, and/or any other indication that the field is empty, absent or incomplete, MUST not be used.
 
@@ -1733,4 +1775,17 @@ jurisdictionCountryName ATTRIBUTE ::= {
 
 END
 
+#  Appendix H – Registration Schemes
+
+The following Registration Schemes are currently recognised as valid under these 
+guidelines:
+
+NTR: The information carried in this field shall be the same as held in Subject Registration Number Field as specified in 9.2.6 and the country code used in the Registration Scheme identifier shall match that of the subject’s jurisdiction as specified in Section 9.2.5.
+   
+VAT: Reference allocated by the national tax authorities to a Legal Entity. This information shall be validated using information provided by the national tax authority against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in Section 9.2.5.
+   
+PSD: Authorisation Number or equivalent allocated to a payment service provider under EU Commission Delegated Regulation (EU) 2018/389 Article 34 and containing the information as specified in ETSI TS 119 495 clause 5.2.1.  This information SHALL be obtained directly from the national competent authority register for payment services or from an information source approved by a government agency, regulatory body, or legislation for this purpose.  This information SHALL be validated by being matched directly or indirectly (for example, by matching a globally unique registration number) against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in 
+   Section 9.2.5.  The stated address of the organisation combined with the organization name SHALL NOT be the only information used to disambiguate the organisation.
+   
+   Where the Subject Jurisdiction of Incorporation or Registration Field in 9.2.5 includes more than the country code, the Registration Number shall be preceded by a globally recognised identifier such as defined in ISO 3166-2, representing the same locality, state or province, followed by hyphen-minus ((0x2D (ASCII), U+002D (UTF-8)).
 
