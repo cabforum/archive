@@ -524,6 +524,8 @@ Certificate field: organizationIdentifier (OID: 2.5.4.97)
 Required/Optional: Optional
 Contents: If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
    
+The organizationIdentifier MUST be encoded as a PrintableString or UTF8String (see RFC 5280).
+
 The Registration Scheme MUST be identified using the using the following structure in the presented order:
 
 • 3 character Registration Scheme identifier;
@@ -554,7 +556,31 @@ b) further verify the Registration Reference matches other information verified 
 c) take appropriate measures to disambiguate between different organizations as described in Appendix H for each Registration Scheme;
 d) Apply the validation rules relevant to the Registration Scheme as specified in Appendix H.
 
-### 9.2.9.  Other Subject Attributes
+### 9.2.9. Subject Organization Identifier Field
+
+Certificate field: euPSD2AuthorisationNumber (OID: 2.23.140.3.1)
+Verbose OID: {joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) 
+              certificate-extensions(3) eu-psd2-authorization-number(1) }
+Required/Optional: Optional
+Contents: If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
+
+The Registration Scheme MUST be encoded as described by the following ASN.1 grammar:
+
+RegistrationScheme ::= BEGIN
+
+    euPSD2AuthorisationNumber ::= SEQUENCE {
+        RegistrationSchemeIdentifier   PrintableString,
+        RegistrationCountry            PrintableString,
+        RegistrationStateorProvince    PrintableString,
+        RegistrationReference          PrintableString
+    }
+
+END
+  
+where the subfields and have the same meanings and restrictions described in Section 9.2.8.
+The CA SHALL validate the contents using the requirements in Section 9.2.8.
+
+### 9.2.10.  Other Subject Attributes
 
 All other optional attributes, when present within the subject field, MUST contain information that has been verified by the CA. CAs SHALL NOT include Fully-Qualified Domain Names in Subject attributes except as specified in Sections 9.2.1 and SHALL NOT include any Subject Organization Information except as specified in Section 9.2. Optional subfields within the Subject field MUST either contain information verified by the CA or MUST be left empty.  Metadata such as '.', '-', and ' ' characters, and/or any other indication that the field is empty, absent or incomplete, MUST not be used.
 
@@ -1784,8 +1810,7 @@ NTR: The information carried in this field shall be the same as held in Subject 
    
 VAT: Reference allocated by the national tax authorities to a Legal Entity. This information shall be validated using information provided by the national tax authority against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in Section 9.2.5.
    
-PSD: Authorisation Number or equivalent allocated to a payment service provider under EU Commission Delegated Regulation (EU) 2018/389 Article 34 and containing the information as specified in ETSI TS 119 495 clause 5.2.1.  This information SHALL be obtained directly from the national competent authority register for payment services or from an information source approved by a government agency, regulatory body, or legislation for this purpose.  This information SHALL be validated by being matched directly or indirectly (for example, by matching a globally unique registration number) against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in 
-   Section 9.2.5.  The stated address of the organisation combined with the organization name SHALL NOT be the only information used to disambiguate the organisation.
+PSD: Authorisation Number as specified in ETSI TS 119 495 clause 4.4 allocated to a payment service provider and containing the information as specified in ETSI TS 119 495 clause 5.2.1.  This information SHALL be obtained directly from the national competent authority register for payment services or from an information source approved by a government agency, regulatory body, or legislation for this purpose.  This information SHALL be validated by being matched directly or indirectly (for example, by matching a globally unique registration number) against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in Section 9.2.5.  The stated address of the organisation combined with the organization name SHALL NOT be the only information used to disambiguate the organisation.
    
    Where the Subject Jurisdiction of Incorporation or Registration Field in 9.2.5 includes more than the country code, the Registration Number shall be preceded by a globally recognised identifier such as defined in ISO 3166-2, representing the same locality, state or province, followed by hyphen-minus ((0x2D (ASCII), U+002D (UTF-8)).
 
