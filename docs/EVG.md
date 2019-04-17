@@ -548,13 +548,13 @@ As in section 9.2.5, the specified location information MUST match the scope of 
 
 Examples:
 
-NTRGB-12345678
-NTRUS+CA-12345678
-NTRJP%ABCDEF-12345678
+NTRGB-12345678 (NTR scheme, Great Britain, Unique Identifier at Country level is 12345678)
+NTRUS+CA-12345678 (NTR Scheme, United States - California, Unique identifier at State level is 12345678)
+NTRJP%ABCDEF-12345678 (NTR Scheme, Japan, Registration Reference provider is ABCDEF, Unique Identifier at Country level is 12345678)
 
-VATDE-123456789
+VATDE-123456789 (VAT Scheme, Germany, Unique Identifier at Country Level is 12345678)
 
-PSDBE-NBB-1234.567.890
+PSDBE-NBB-1234.567.890 (PSD Scheme, Belgium, NCA's identifier is NBB, Subject Unique Identifier assigned by the NCA is 1234.567.890)
 
 Registration Schemes listed in Appendix H are currently recognized as valid under 
 these guidelines.
@@ -656,20 +656,22 @@ The extensions listed in the Section 9.8 are recommended for maximum interoperab
 
 If a CA includes an extension in a certificate that has a Certificate field which is named in this Section 9.8, the CA must follow the format specified in that subjection.  However, no extension or extension format shall be mandatory on a CA unless specifically stated as “Required” in the subsection that describes the extension.
 
-### 9.8.1. Subject Organization Identifier Field
+### 9.8.1. CA/Browser Forum Organization Identifier Field
 
-**Certificate field:** euPSD2AuthorizationNumber (OID: 2.23.140.3.1)
+**Certificate field:** cabfOrganizationIdentifier (OID: 2.23.140.3.1)
 
 **Verbose OID:** {joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) 
-              certificate-extensions(3) eu-psd2-authorization-number(1) }
+              certificate-extensions(3) cabf-organization-identifier(1) }
               
-**Required/Optional:** Optional
+**Required/Optional:** Optional (but see below)
 
-**Contents:** If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
+**Contents:** If the subject:organizationIdentifier is present, this field SHOULD be present.  Effective January 31, 2020, if the subject:organizationIdentifier field is present, this field MUST be present.
+
+If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
 
 The Registration Scheme MUST be encoded as described by the following ASN.1 grammar:
 
-    id-CABFOrganizationIdentifier OBJECT IDENTIFIER ::= { joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) certificate-extensions(3) cabf-organizationIdentifier(1) }
+    id-CABFOrganizationIdentifier OBJECT IDENTIFIER ::= { joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) certificate-extensions(3) cabf-organization-identifier(1) }
 
     ext-CABFOrganizationIdentifier EXTENSION ::= { SYNTAX CABFOrganizationIdentifier IDENTIFIED BY id-CABFOrganizationIdentifier }
 
@@ -683,8 +685,6 @@ The Registration Scheme MUST be encoded as described by the following ASN.1 gram
   
 where the subfields and have the same meanings and restrictions described in Section 9.2.8.
 The CA SHALL validate the contents using the requirements in Section 9.2.8.
-
-
 
 # 10. EV Certificate Request Requirements
 
