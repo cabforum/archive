@@ -1841,10 +1841,8 @@ guidelines:
    as specified in Section 9.2.5.
 
    Where the Subject Jurisdiction of Incorporation or Registration Field in 9.2.5 
-   includes more than the country code, the Registration Number shall be preceded 
-   by a globally recognised identifier such as defined in ISO 3166-2, representing 
-   the same locality, state or province, followed by hyphen-minus 
-   ((0x2D (ASCII), U+002D (UTF-8)).
+   includes more than the country code, the additional locality information shall
+   be included as specified in sections 9.2.8 and/or 9.8.1.
 
 **VAT**: Reference allocated by the national tax authorities to a Legal Entity. This 
    information shall be validated using information provided by the national tax 
