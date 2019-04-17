@@ -520,67 +520,60 @@ Postal code: subject:postalCode (OID:  2.5.4.17)
 
 ### 9.2.8.  Subject Organization Identifier Field
 
-Certificate field: organizationIdentifier (OID: 2.5.4.97)
-Required/Optional: Optional
-Contents: If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
+**Certificate field:** organizationIdentifier (OID: 2.5.4.97)
+
+**Required/Optional:** Optional
+
+**Contents:** If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
    
-The organizationIdentifier MUST be encoded as a PrintableString or UTF8String (see RFC 5280).
+The organizationIdentifier MUST be encoded as a PrintableString or UTF8String.
 
 The Registration Scheme MUST be identified using the using the following structure in the presented order:
 
 • 3 character Registration Scheme identifier;
-• 2 character ISO 3166 country code for the nation in which the Registration Scheme is operated, or if the scheme is operated globally ISO 3166 code “XG” shall be used;
+• 2 character ISO 3166 country code for the nation in which the Registration 
+     Scheme is operated, or if the scheme is operated globally ISO 3166 code 
+     “XG” shall be used;
+• For NTR identifiers, if required under Section 9.2.5, a 2 character ISO 3166-2 
+     identifier for the subdivision (state or province) of the nation in which 
+     the Registration Scheme is operated, preceded by plus "+" (0x2B (ASCII), U+002B (UTF-8));
+• (optional) 2-8 character Registration Reference provider without country code
+  (A-Z uppercase only, no separator) as registrationReferenceProvider, preceded
+  by a percent "%" (0x25 (ASCII) U+0025 (UTF-8)); and
 • hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)); 
-• if required under Section 9.2.5, a 2 character ISO 3166-2 identifier for the subdivision (state or province) of the nation in which the Registration Scheme is operated, followed by hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)); and
 • Registration Reference allocated in accordance with the identified Registration 
      Scheme
-
+     
 As in section 9.2.5, the specified location information MUST match the scope of the registration being referenced.
 
 Examples:
 
 NTRGB-12345678
-NTRUS-CA-12345678
+NTRUS+CA-12345678
+NTRJP%ABCDEF-12345678
 
 VATDE-123456789
 
 PSDBE-NBB-1234.567.890
 
-Registration Schemes listed in Appendix H are currently recognized as valid under these guidelines.
+Registration Schemes listed in Appendix H are currently recognized as valid under 
+these guidelines.
 
 The CA SHALL:
 
-a) confirm that the organization represented by the Registration Reference is the same as the organization named in the organizationName field as specified in Section 9.2.1 within the context of the subject’s jurisdiction as specified in 
+1. confirm that the organization represented by the Registration Reference is the 
+   same as the organization named in the organizationName field as specified in 
+   Section 9.2.1 within the context of the subject’s jurisdiction as specified in 
    Section 9.2.5;
-b) further verify the Registration Reference matches other information verified in accordance with section 11; 
-c) take appropriate measures to disambiguate between different organizations as described in Appendix H for each Registration Scheme;
-d) Apply the validation rules relevant to the Registration Scheme as specified in Appendix H.
-
-### 9.2.9. Subject Organization Identifier Field
-
-Certificate field: euPSD2AuthorizationNumber (OID: 2.23.140.3.1)
-Verbose OID: {joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) 
-              certificate-extensions(3) eu-psd2-authorization-number(1) }
-Required/Optional: Optional
-Contents: If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
-
-The Registration Scheme MUST be encoded as described by the following ASN.1 grammar:
-
-RegistrationScheme ::= BEGIN
-
-    euPSD2AuthorizationNumber ::= SEQUENCE {
-        RegistrationSchemeIdentifier   PrintableString,
-        RegistrationCountry            PrintableString,
-        RegistrationStateorProvince    PrintableString,
-        RegistrationReference          PrintableString
-    }
-
-END
+2. further verify the Registration Reference matches other information verified 
+   in accordance with section 11; 
+3. take appropriate measures to disambiguate between different organizations as 
+   described in Appendix H for each Registration Scheme;
+4. Apply the validation rules relevant to the Registration Scheme as specified 
+   in Appendix H.
   
-where the subfields and have the same meanings and restrictions described in Section 9.2.8.
-The CA SHALL validate the contents using the requirements in Section 9.2.8.
 
-### 9.2.10.  Other Subject Attributes
+### 9.2.9.  Other Subject Attributes
 
 All other optional attributes, when present within the subject field, MUST contain information that has been verified by the CA. CAs SHALL NOT include Fully-Qualified Domain Names in Subject attributes except as specified in Sections 9.2.1 and SHALL NOT include any Subject Organization Information except as specified in Section 9.2. Optional subfields within the Subject field MUST either contain information verified by the CA or MUST be left empty.  Metadata such as '.', '-', and ' ' characters, and/or any other indication that the field is empty, absent or incomplete, MUST not be used.
 
@@ -656,6 +649,42 @@ Otherwise, it MAY contain the anyPolicy identifier.
     - HTTP URL for the Subordinate CA's Certification Practice Statement
 
 (4)  The cRLDistribution Point extension MUST be present in Subscriber Certificates if the certificate does not specify OCSP responder locations in an authorityInformationAccess extension.
+
+## 9.8. Certificate Extensions
+
+The extensions listed in the Section 9.8 are recommended for maximum interoperability between certificates and browsers / applications, but are not mandatory on the CAs except where indicated as “Required”.  CAs may use other extensions that are not listed in this Section 9.8, but are encouraged to add them to this section by ballot from time to time to help increase externsion standardization across the industry.  
+
+If a CA includes an extension in a certificate that has a Certificate field which is named in this Section 9.8, the CA must follow the format specified in that subjection.  However, no extension or extension format shall be mandatory on a CA unless specifically stated as “Required” in the subsection that describes the extension.
+
+### 9.8.1. Subject Organization Identifier Field
+
+**Certificate field:** euPSD2AuthorizationNumber (OID: 2.23.140.3.1)
+
+**Verbose OID:** {joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) 
+              certificate-extensions(3) eu-psd2-authorization-number(1) }
+              
+**Required/Optional:** Optional
+
+**Contents:** If present, this field MUST contain a Registration Reference for a Legal Entity assigned in accordance to the identified Registration Scheme.
+
+The Registration Scheme MUST be encoded as described by the following ASN.1 grammar:
+
+    id-CABFOrganizationIdentifier OBJECT IDENTIFIER ::= { joint-iso-itu-t(2) international-organizations(23) ca-browser-forum(140) certificate-extensions(3) cabf-organizationIdentifier(1) }
+
+    ext-CABFOrganizationIdentifier EXTENSION ::= { SYNTAX CABFOrganizationIdentifier IDENTIFIED BY id-CABFOrganizationIdentifier }
+
+    CABFOrganizationIdentifier ::= SEQUENCE {
+        registrationSchemeIdentifier   PrintableString (SIZE(3)),
+        registrationCountry            PrintableString (SIZE(2)),
+        registrationStateOrProvince    UTF8String (SIZE(0..128)),
+        registrationReferenceProvider  PritableString (SIZE(0..8)),
+        registrationReference          UTF8String
+    }
+  
+where the subfields and have the same meanings and restrictions described in Section 9.2.8.
+The CA SHALL validate the contents using the requirements in Section 9.2.8.
+
+
 
 # 10. EV Certificate Request Requirements
 
@@ -1806,11 +1835,33 @@ END
 The following Registration Schemes are currently recognised as valid under these 
 guidelines:
 
-NTR: The information carried in this field shall be the same as held in Subject Registration Number Field as specified in 9.2.6 and the country code used in the Registration Scheme identifier shall match that of the subject’s jurisdiction as specified in Section 9.2.5.
-   
-VAT: Reference allocated by the national tax authorities to a Legal Entity. This information shall be validated using information provided by the national tax authority against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in Section 9.2.5.
-   
-PSD: Authorization number as specified in ETSI TS 119 495 clause 4.4 allocated to a payment service provider and containing the information as specified in ETSI TS 119 495 clause 5.2.1.  This information SHALL be obtained directly from the national competent authority register for payment services or from an information source approved by a government agency, regulatory body, or legislation for this purpose.  This information SHALL be validated by being matched directly or indirectly (for example, by matching a globally unique registration number) against the organisation as identified by the Subject Organization Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within the context of the subject’s jurisdiction as specified in Section 9.2.5.  The stated address of the organisation combined with the organization name SHALL NOT be the only information used to disambiguate the organisation.
-   
-   Where the Subject Jurisdiction of Incorporation or Registration Field in 9.2.5 includes more than the country code, the Registration Number shall be preceded by a globally recognised identifier such as defined in ISO 3166-2, representing the same locality, state or province, followed by hyphen-minus ((0x2D (ASCII), U+002D (UTF-8)).
+**NTR**: The information carried in this field shall be the same as held in Subject 
+   Registration Number Field as specified in 9.2.6 and the country code used in 
+   the Registration Scheme identifier shall match that of the subject’s jurisdiction 
+   as specified in Section 9.2.5.
 
+   Where the Subject Jurisdiction of Incorporation or Registration Field in 9.2.5 
+   includes more than the country code, the Registration Number shall be preceded 
+   by a globally recognised identifier such as defined in ISO 3166-2, representing 
+   the same locality, state or province, followed by hyphen-minus 
+   ((0x2D (ASCII), U+002D (UTF-8)).
+
+**VAT**: Reference allocated by the national tax authorities to a Legal Entity. This 
+   information shall be validated using information provided by the national tax 
+   authority against the organisation as identified by the Subject Organization 
+   Name Field (see 9.2.1) and Subject Registration Number Field (see 9.2.6) within 
+   the context of the subject’s jurisdiction as specified in Section 9.2.5.
+   
+**PSD**: Authorization number as specified in ETSI TS 119 495 clause 4.4 allocated to a 
+   payment service provider and containing the information as specified in 
+   ETSI TS 119 495 clause 5.2.1.  This information SHALL be obtained directly from the 
+   national competent authority register for payment services or from an information 
+   source approved by a government agency, regulatory body, or legislation for this 
+   purpose.  This information SHALL be validated by being matched directly or indirectly 
+   (for example, by matching a globally unique registration number) against the 
+   organisation as identified by the Subject Organization Name Field (see 9.2.1) and 
+   Subject Registration Number Field (see 9.2.6) within the context of the subject’s 
+   jurisdiction as specified in Section 9.2.5.  The stated address of the organisation 
+   combined with the organization name SHALL NOT be the only information used to 
+   disambiguate the organisation.
+   
