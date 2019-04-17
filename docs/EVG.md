@@ -675,11 +675,11 @@ The Registration Scheme MUST be encoded as described by the following ASN.1 gram
 
     ext-CABFOrganizationIdentifier EXTENSION ::= { SYNTAX CABFOrganizationIdentifier IDENTIFIED BY id-CABFOrganizationIdentifier }
 
-    CABFOrganizationIdentifier ::= SEQUENCE {
+CABFOrganizationIdentifier ::= SEQUENCE {
         registrationSchemeIdentifier   PrintableString (SIZE(3)),
         registrationCountry            PrintableString (SIZE(2)),
-        registrationStateOrProvince    UTF8String (SIZE(0..128)),
-        registrationReferenceProvider  PritableString (SIZE(0..8)),
+        registrationStateOrProvince    [0] IMPLICIT PrintableString OPTIONAL (SIZE(0..128)),
+        registrationReferenceProvider  PrintableString (SIZE(0..8)),
         registrationReference          UTF8String
     }
   
